@@ -1,24 +1,15 @@
 <?php
-
 /**
  * Abstract class for a number of payment gateways
  *
  * @package payment
  */
 abstract class PaymentGateway {
-
   /**
-   * Default gateway environment. Override by adding settings to config yaml files.
-   * 
-   * e.g:
-   * PaymentGateway:
-   *   environment:
-   *     'dev'
-   * 
-   * @var String
+   * The default environment. This will be overriden by yaml config.
    */
-  public $environment = 'live';
-
+  public static $environment = 'dev';
+  
   /**
    * The gateway url
    * 
