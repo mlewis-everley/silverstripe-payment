@@ -103,7 +103,7 @@ class PaymentProcessor extends Controller {
     
     // Do pre-processing
     $this->preProcess();
-    
+
     // Do gateway validation of payment data
     $validation = $this->gateway->validatePaymentData($this->paymentData);
     
