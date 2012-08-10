@@ -6,11 +6,6 @@
  */
 class PaymentGateway {
   /**
-   * The default environment. This will be overriden by yaml config.
-   */
-  public static $environment = 'dev';
-  
-  /**
    * The gateway url
    * 
    * @var String
@@ -43,7 +38,11 @@ class PaymentGateway {
   private $gatewayResult;
 
   public static function get_environment() {
-    return Config::inst()->get('PaymentGateway', 'environment');
+    if (Config::inst()->get('PaymentGateway', 'environment')) {
+      return Config::inst()->get('PaymentGateway', 'environment');
+    } else {
+      return Director::get_environment_type();
+    }
   }
   
   public function __construct() {
