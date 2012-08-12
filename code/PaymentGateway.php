@@ -92,7 +92,6 @@ class PaymentGateway {
    * @return ValidationResult
    */
   public function validate($data) {
-
     $validationResult = $this->getValidationResult();
 
     if (! isset($data['Amount'])) {
@@ -198,12 +197,12 @@ class PaymentGateway_GatewayHosted extends PaymentGateway {
   }
 
   /**
-   * Parse the response object from the gateway and return the result
+   * Get the response object from the gateway and return the result
    *
    * @param SS_HTTPRequest $response
    * @return PaymentGateway_Result
    */
-   public function parseResponse($response) {
+   public function getResponse($response) {
      return new PaymentGateway_Success();
    }
 }
@@ -231,7 +230,7 @@ class PaymentGateway_Result {
    *
    * @var array
    */
-  protected $messages;
+  protected $messages = array();
 
   /**
    * Array of errors raised by the gateway
@@ -239,7 +238,7 @@ class PaymentGateway_Result {
    *
    * @var array
    */
-  protected $errors;
+  protected $errors = array();
 
   /**
    * The HTTP response object passed back from the gateway
@@ -282,7 +281,7 @@ class PaymentGateway_Result {
   }
 
   public function getMessage() {
-    return implode(',', $this-<messages);
+    return implode(',', $this->messages);
   }
 
   public function getErrors() {
@@ -348,7 +347,7 @@ class PaymentGateway_Result {
    */
   public function addError($message, $code = null) {
     if ($code) {
-      if (array_key_exists($code, $this->errors) {
+      if (array_key_exists($code, $this->errors)) {
         throw new Exception("Error code already exists");
       } else {
         $this->errors[$code] = $message;
@@ -382,7 +381,7 @@ class PaymentGateway_Failure extends PaymentGateway_Result {
 
 class PaymentGateway_Incomplete extends PaymentGateway_Result {
 
-  function __construct($message = null, $response = null, $errors = null) {
+  function __construct($response = null, $message = null, $errors = null) {
     parent::__construct(self::INCOMPLETE, $response, $message, $errors);
   }
 }
