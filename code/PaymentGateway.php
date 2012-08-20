@@ -246,13 +246,6 @@ class PaymentGateway_Result {
   protected $status;
 
   /**
-   * Array of messages passed back from the gateway
-   *
-   * @var array
-   */
-  protected $messages = array();
-
-  /**
    * Array of errors raised by the gateway
    * array(ErrorCode => ErrorMessage)
    *
@@ -273,16 +266,14 @@ class PaymentGateway_Result {
    * @param String or array $messages
    * @param array $errors
    */
-  function __construct($status, $response = null, $messages = null, $errors = null) {
+  function __construct($status, $response = null, $errors = null) {
     if (! $response) {
       $response = new SS_HTTPResponse('', 200);
     }
 
     $this->HTTPResponse = $response;
     $this->setStatus($status);
-    if ($messages) {
-      $this->setMessages($messages);
-    }
+
     if ($errors) {
       $this->setErrors($errors);
     }
@@ -294,14 +285,6 @@ class PaymentGateway_Result {
 
   public function getStatus() {
     return $this->status;
-  }
-
-  public function getMessageList() {
-    return $this->messages;
-  }
-
-  public function getMessage() {
-    return implode(',', $this->messages);
   }
 
   public function getErrors() {
@@ -319,21 +302,6 @@ class PaymentGateway_Result {
       $this->status = $status;
     } else {
       throw new Exception("Result status invalid");
-    }
-  }
-
-  /**
-   * Set the gateway messages
-   *
-   * @param array|String $messages
-   *        If an array is passed, take it as the $messages array.
-   *        If a string is passed, add it to the $messages array.
-   */
-  public function setMessages($messages) {
-    if (is_array($messages)) {
-      $this->messages = $messages;
-    } else {
-      array_push($this->messages, $messages);
     }
   }
 
@@ -379,15 +347,6 @@ class PaymentGateway_Result {
       array_push($this->errors, $message);
     }
   }
-
-  /**
-   * Add a message to the message list
-   *
-   * @param String message
-   */
-  public function addMesasge($message) {
-    array_push($this->messages, $messages);
-  }
 }
 
 /**
@@ -395,8 +354,8 @@ class PaymentGateway_Result {
  */
 class PaymentGateway_Success extends PaymentGateway_Result {
 
-  function __construct($messages = null) {
-    parent::__construct(self::SUCCESS, null, $messages);
+  function __construct() {
+    parent::__construct(self::SUCCESS);
   }
 }
 
@@ -405,8 +364,8 @@ class PaymentGateway_Success extends PaymentGateway_Result {
  */
 class PaymentGateway_Failure extends PaymentGateway_Result {
 
-  function __construct($response = null, $messages = null, $errors = null) {
-    parent::__construct(self::FAILURE, $response, $messages, $errors);
+  function __construct($response = null, $errors = null) {
+    parent::__construct(self::FAILURE, $response, $errors);
   }
 }
 
@@ -415,7 +374,7 @@ class PaymentGateway_Failure extends PaymentGateway_Result {
  */
 class PaymentGateway_Incomplete extends PaymentGateway_Result {
 
-  function __construct($response = null, $message = null, $errors = null) {
-    parent::__construct(self::INCOMPLETE, $response, $message, $errors);
+  function __construct($response = null, $errors = null) {
+    parent::__construct(self::INCOMPLETE, $response, $errors);
   }
 }
