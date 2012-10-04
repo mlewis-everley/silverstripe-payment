@@ -1,0 +1,9 @@
+---
+Name: Payment Routes
+After: framework/routes#rootroutes
+---
+Director:
+  rules:
+    'worldpay/$Action/$ID': 'WorldpayPayment_Handler'
+    'paypal/$Action/$ID': 'PayPalPayment_Handler'
+    'harness/$Action/$Class/$ID': 'Harness'
